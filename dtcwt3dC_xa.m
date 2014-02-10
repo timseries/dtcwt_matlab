@@ -59,7 +59,7 @@ end
 % Define the top level filters.
 if isempty(h0o),
    disp('Generating level 1 filters.')
-   [h0o,h1o,g0o,g1o] = wavegen('near-sym',[3.5 3/16 0])
+   [h0o,h1o,g0o,g1o] = wavegen('near-sym',[3.5 3/16 0]);
 %   [h0o,h1o,g0o,g1o] = wavegen('Antonini');
 %   [h0o,h1o,g0o,g1o] = wavegen('LeGall');
 end
