@@ -45,6 +45,8 @@ global ya   % ya is used to store the DTCWT coefs of xa.
             % e.g. ya{3}{1} means the 'HLL' band at level 3.
             % band number: 1 => HLL, 2 => LHL, 3 => HHL, 
             % 4 => LLH, 5 => HLH, 6 => LHH, 7 => HHH
+global yscale
+
 global original_size  % original_size is the original input image size
 
 if nargin < 2, ext_mode = 4; end % default ext_mode is 4
@@ -57,7 +59,7 @@ end
 % Define the top level filters.
 if isempty(h0o),
    disp('Generating level 1 filters.')
-   [h0o,h1o,g0o,g1o] = wavegen('near-sym',[3.5 3/16 0]);
+   [h0o,h1o,g0o,g1o] = wavegen('near-sym',[3.5 3/16 0])
 %   [h0o,h1o,g0o,g1o] = wavegen('Antonini');
 %   [h0o,h1o,g0o,g1o] = wavegen('LeGall');
 end
@@ -94,8 +96,8 @@ g1b = rev(g1a);
 
 
 
-fprintf(1,'Level %d: ',level);
-tic
+%fprintf(1,'Level %d: ',level);
+%tic
 
 if level == 1,
     original_size = size(xa/2); % Original size is the size of the input dataset
@@ -150,7 +152,8 @@ if level == 1,
     ya{level}{6} = xa(s1b,s2,s3b);    % LHH
     ya{level}{7} = xa(s1b,s2b,s3b);   % HHH
     xa = xa(s1,s2,s3);                % LLL
-    
+    yscale{level} = xa;               % LLL
+
 elseif level >= 2,
     % Check if the LoLoLo band is divisable by the value of ext_mode in
     % each direction. If not, we aim to extend the LoLoLo band to make its
@@ -226,7 +229,8 @@ elseif level >= 2,
     ya{level}{6} = xa(s1b,s2,s3b);    % LHH
     ya{level}{7} = xa(s1b,s2b,s3b);   % HHH
     xa = xa(s1,s2,s3);                % LLL
-    
+    yscale{level} = xa;                  % LLL
+
 elseif level == -1,    
     sxa = size(xa);
     t1 = 1:2*sxa(1); t2 = 1:2*sxa(2); t3 = 1:2*sxa(3);
@@ -319,8 +323,8 @@ else
    disp('Illegal level');
 end
 
-tk = toc;
-fprintf(1,'toc = %.2f sec\n',tk);
+%tk = toc;
+%fprintf(1,'toc = %.2f sec\n',tk);
 
 return;
 
